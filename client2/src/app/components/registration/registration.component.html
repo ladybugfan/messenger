@@ -1,0 +1,65 @@
+<article class="register_form">
+    <h1>Регистрация</h1>
+    <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+
+        <mat-form-field appearance="fill">
+            <mat-label>Имя пользователя</mat-label>
+            <input matInput formControlName="username" required />
+            <mat-error *ngIf="registrationForm.get('username')?.hasError('required')">Обязательное поле</mat-error>
+            <mat-error *ngIf="registrationForm.get('username')?.hasError('pattern')">Значение содержит запрещенные
+                символы</mat-error>
+            <mat-error *ngIf="registrationForm.get('username')?.hasError('maxlength')">Максимальное количество
+                символов:50</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Пароль</mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required />
+            <button mat-icon-button matSuffix (click)="hide = !hide" aria-label="Toggle password visibility">
+                <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="registrationForm.get('password')?.hasError('required')">
+                Обязательное поле
+            </mat-error>
+            <mat-error
+                *ngIf="registrationForm.get('password')?.hasError('minlength') && !registrationForm.get('password')?.hasError('required')">
+                Минимум 9 символов
+            </mat-error>
+            <mat-error
+                *ngIf="registrationForm.get('password')?.hasError('pattern') && !registrationForm.get('password')?.hasError('required') && !registrationForm.get('password')?.hasError('minlength')">
+                Пароль должен содержать хотя бы одну заглавную букву и один спецсимвол
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Повторите пароль</mat-label>
+            <input matInput [type]="hideConfirm ? 'password' : 'text'" formControlName="confirmPassword" required />
+            <button mat-icon-button matSuffix (click)="hideConfirm = !hideConfirm"
+                aria-label="Toggle password visibility">
+                <mat-icon>{{ hideConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+
+            <mat-error *ngIf="registrationForm.get('confirmPassword')?.hasError('required')">
+                Обязательное поле
+            </mat-error>
+            <mat-error
+                *ngIf="registrationForm.errors?.passwordMismatch && registrationForm.get('confirmPassword')?.touched">
+                Введенные пароли не совпадают
+            </mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit"
+            [disabled]="registrationForm.invalid">Зарегистрироваться</button>
+    </form>
+
+    <div *ngIf="registrationSuccess" class="success-message">
+        Регистрация прошла успешно, вы можете войти используя указанные учетные данные.
+        <a routerLink="/login">Войти</a>
+    </div>
+
+    <div *ngIf="registrationError" class="error-message">
+        {{ registrationError }}
+    </div>
+
+    <p>Уже есть аккаунт? <a [routerLink]="['/login']">Войти</a></p>
+</article>

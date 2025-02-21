@@ -1,0 +1,45 @@
+.login_form {
+  max-width: 400px;
+  margin: 80px auto;
+  text-align: center;
+  border: solid 1px rgb(216, 215, 215);
+  border-radius: 10px;
+  padding: 15px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  margin: 30px 0;
+}
+
+a:hover,
+a:focus,
+a:active,
+a:visited {
+  color: rgb(0, 0, 0);
+  text-decoration: underline;
+}
+
+mat-form-field,
+button {
+  width: 90%;
+  margin: 5px auto;
+}
+
+button.mat-raised-button[disabled] {
+  background-color: rgb(130, 135, 163);
+  color: white;
+}
+
+button.mat-raised-button {
+  background-color: rgb(65, 63, 160);
+}
+
+a {
+  text-decoration: none;
+  text-decoration: underline;
+}/*# sourceMappingURL=login.component.css.map */

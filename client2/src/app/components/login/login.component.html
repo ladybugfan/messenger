@@ -1,0 +1,28 @@
+<article class="login_form">
+
+
+    <h1>Авторизация</h1>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+        <mat-form-field appearance="fill">
+            <mat-label>Логин</mat-label>
+            <input matInput formControlName="login" required />
+            <mat-error *ngIf="loginForm.get('login')?.hasError('required')">Обязательное поле</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Пароль</mat-label>
+            <input matInput type="password" formControlName="password" required />
+            <mat-error *ngIf="loginForm.get('password')?.hasError('required')">Обязательное поле</mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Войти</button>
+
+        <div *ngIf="error" class="error-message">{{ error }}</div>
+    </form>
+
+    <p>Еще нет аккаунта? <a [routerLink]="['/register']">Зарегистрироваться</a></p>
+
+
+</article>

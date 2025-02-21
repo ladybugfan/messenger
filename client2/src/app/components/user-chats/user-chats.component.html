@@ -1,0 +1,139 @@
+<div class="telegram-container">
+    <!-- Верхняя панель -->
+    <mat-toolbar color="primary" class="toolbar">
+    </mat-toolbar>
+
+    <div class="content">
+        <div class="resizable-container">
+            <div class="sidebar" id="sidebar">
+                <mat-nav-list>
+                    <mat-list-item *ngFor="let room of dataSource.data" (click)="selectRoom(room)"
+                        [class.selected]="room.id === selectedRoom?.id">
+
+                        <div class="chat-info">
+                            <div>rkofkdok</div>
+                            <div class="room-name">{{ room?.username }}</div>
+                            <div class="room-info">{{ room?.encryption_algorithm }}/{{ room?.encryption_mode
+                                }}/{{ room.padding_mode }}</div>
+                        </div>
+
+                        <div class="room-actions">
+                            <button class="joinRoom" *ngIf="room.isAvailable" mat-stroked-button color="primary"
+                                (click)="joinRoom(room.id)">
+                                Вступить
+                            </button>
+
+                            <button *ngIf="!room.isAvailable" mat-icon-button [matMenuTriggerFor]="roomMenu"
+                                (click)="$event.stopPropagation()">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+
+                            <!-- Меню с действиями -->
+                            <mat-menu #roomMenu="matMenu">
+                                <button mat-menu-item (click)="leaveRoom(room.id)">
+                                    <mat-icon>logout</mat-icon>
+                                    <span>Покинуть чат</span>
+                                </button>
+                                <button mat-menu-item (click)="deleteRoom(room.id)">
+                                    <mat-icon>delete</mat-icon>
+                                    <span>Удалить чат</span>
+                                </button>
+                            </mat-menu>
+                        </div>
+
+                    </mat-list-item>
+                </mat-nav-list>
+            </div>
+
+
+
+
+            <div class="chat-window" *ngIf="selectedRoom; else selectChatPrompt">
+                <div class="chat-header">
+                    <h2>{{ selectedRoom.username }}</h2>
+                </div>
+
+                <div *ngIf="selectedRoom.isAvailable; else chatContent">
+                    <div class="join-message">
+                        <h3>Вы ещё не вступили в чат!</h3>
+                        <button mat-raised-button color="accent" (click)="joinRoom(selectedRoom.id)">
+                            Вступить
+                        </button>
+                    </div>
+                </div>
+
+                <ng-template #chatContent>
+                    <div class="messages" #messagesContainer>
+                        <div *ngFor="let message of currentChatMessages; trackBy: trackByMessageId" class="message"
+                            [class.self]="message.sender_id === currentUserId">
+
+                            <div class="message-bubble">
+                                <!-- Отображение текстового сообщения -->
+                                <p *ngIf="message.message_text">{{ message.message_text }}</p>
+
+                                <!-- Отображение изображения -->
+                                <div *ngIf="message.file_type && message.file_type.startsWith('image') && message.file_path"
+                                    class="chat-image-container">
+                                    <img [src]="message.file_path" alt="image" class="chat-image" />
+                                </div>
+
+                                <!-- Отображение видео -->
+                                <video
+                                    *ngIf="message.file_path && message.file_type && message.file_type.startsWith('video')"
+                                    controls class="chat-video">
+                                    <source [src]="message.file_path" type="video/mp4">
+                                    Ваш браузер не поддерживает видео.
+                                </video>
+
+                                <!-- Отображение файла (документы, PDF, ZIP) -->
+                                <a *ngIf="message.file_path && message.file_type && message.file_type.startsWith('application')"
+                                    [href]="message.file_path" target="_blank" class="chat-file">
+                                    📄 Скачать файл
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="message-input">
+                        <mat-form-field appearance="outline" class="input-field">
+                            <mat-label>Напишите сообщение...</mat-label>
+                            <textarea matInput [(ngModel)]="newMessage"
+                                [disabled]="!isSecondUserConnected || selectedRoom.isAvailable || !!selectedFile"></textarea>
+                        </mat-form-field>
+
+                        <!-- Поле для выбора файлов -->
+                        <input type="file" #fileInput (change)="onFileSelected($event)" style="display: none;">
+                        <button mat-icon-button (click)="fileInput.click()"
+                            [disabled]="!isSecondUserConnected || !!newMessage.length">
+                            <mat-icon>attach_file</mat-icon>
+                        </button>
+
+                        <div *ngIf="selectedFile" class="selected-file">
+                            <span>{{ selectedFile.name }}</span>
+                            <button mat-icon-button (click)="removeFile()">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </div>
+
+                        <!-- Кнопка отправки -->
+                        <button mat-raised-button color="primary"
+                            (click)="sendMessage(selectedRoom.id, selectedRoom.other_user_id, selectedRoom.encryption_algorithm,selectedRoom.encryption_mode,selectedRoom.padding_mode)"
+                            [disabled]="!isSecondUserConnected || selectedRoom.isAvailable || (!newMessage && !selectedFile)">
+                            Отправить
+                        </button>
+                    </div>
+
+                </ng-template>
+
+            </div>
+
+            <ng-template #selectChatPrompt>
+                <div class="empty-chat">
+                    <h3>Выберите чат, чтобы начать общение</h3>
+                </div>
+            </ng-template>
+
+        </div>
+    </div>
+</div>

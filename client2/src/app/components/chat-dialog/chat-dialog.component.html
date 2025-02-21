@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>Настройки нового чата</h2>
+
+<mat-dialog-content>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Алгоритм шифрования</mat-label>
+    <mat-select [(value)]="encryptionAlgorithm">
+      <mat-option *ngFor="let algo of algorithms" [value]="algo">
+        {{ algo }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Режим шифрования</mat-label>
+    <mat-select [(value)]="encryptionMode">
+      <mat-option *ngFor="let mode of modes" [value]="mode">{{ mode }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Режим набивки</mat-label>
+    <mat-select [(value)]="paddingMode">
+      <mat-option *ngFor="let padding of paddings" [value]="padding">{{ padding }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Выберите пользователя</mat-label>
+    <input
+      type="text"
+      matInput
+      [formControl]="userControl"
+      [matAutocomplete]="auto"
+      placeholder="Поиск пользователя"
+    />
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser">
+      <mat-option *ngFor="let user of filteredUsers | async" [value]="user">
+        {{ user.username }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  
+
+<mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="createChat()">Создать чат</button>
+  <button mat-raised-button mat-dialog-close>Отмена</button>
+</mat-dialog-actions>

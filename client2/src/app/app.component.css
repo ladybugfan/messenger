@@ -1,0 +1,13 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0 !important;
+}/*# sourceMappingURL=app.component.css.map */

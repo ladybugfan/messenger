@@ -1,0 +1,26 @@
+<div class="main-container">
+    <button mat-raised-button color="primary" (click)="openChatDialog()">Создать новый чат</button>
+</div>
+
+<button mat-icon-button color="primary" (click)="logout()" aria-label="Logout">
+    <mat-icon>logout</mat-icon>
+</button>
+
+<app-user-chats></app-user-chats>
+<!-- 
+<header>
+    <mat-tab-group (selectedTabChange)="onTabChange($event)">
+        <mat-tab label="Мой банк"></mat-tab>
+        <mat-tab label="Личный кабинет"></mat-tab>
+        <mat-tab label="Каталог продуктов"></mat-tab>
+    </mat-tab-group>
+
+
+    <button mat-icon-button color="primary" (click)="logout()" aria-label="Logout">
+        <mat-icon>logout</mat-icon>
+    </button>
+</header>
+
+
+
+<router-outlet></router-outlet> -->
