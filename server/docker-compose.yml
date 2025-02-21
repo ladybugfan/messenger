@@ -1,0 +1,12 @@
+services:
+  flask_app:
+    build: .
+    ports:
+      - "5000:5000" 
+    environment:
+      - FLASK_ENV=production 
+    volumes:
+      - ./data/chat_app.db:/app/chat_app.db 
+
+volumes:
+  chat_app_data:
